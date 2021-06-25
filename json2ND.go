@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 )
 
-func processJSONFile(inputFile string, writerChannel chan<- map[string]interface{}, isJSONArray bool) {
+func processJSONFile(inputFile string, writerChannel chan<- map[string]interface{}, singleJSONObject bool) {
 	file, err := os.Open(inputFile)
 	if err != nil {
 		log.Fatalf("error opening inputfile, err: %s", err)
@@ -18,7 +18,7 @@ func processJSONFile(inputFile string, writerChannel chan<- map[string]interface
 	defer file.Close()
 
 	dec := json.NewDecoder(file)
-	if isJSONArray {
+	if !singleJSONObject {
 		var input []map[string]interface{}
 		err := dec.Decode(&input)
 		if err != nil {
@@ -28,6 +28,7 @@ func processJSONFile(inputFile string, writerChannel chan<- map[string]interface
 			writerChannel <- val
 		}
 		close(writerChannel)
+		return
 	}
 	for {
 		var val map[string]interface{}
@@ -90,7 +91,7 @@ func createStringWriter(outputPath string) func(string, bool) {
 
 func main() {
 	filePath := flag.String("file", "", "File location or name")
-	isJSONArray := flag.Bool("array", true, "If the input file is an array of json objects")
+	singleJSONObject := flag.Bool("single", false, "If the input file is a single json object without array brackets")
 	flag.Parse() // This will parse all the arguments from the terminal
 
 	if fileExt := filepath.Ext(*filePath); fileExt != ".json" {
@@ -104,7 +105,7 @@ func main() {
 	writerChannel := make(chan map[string]interface{})
 	done := make(chan bool)
 
-	go processJSONFile(*filePath, writerChannel, *isJSONArray)
+	go processJSONFile(*filePath, writerChannel, *singleJSONObject)
 	go writeNDJSONFile(*filePath, writerChannel, done)
 
 	<-done

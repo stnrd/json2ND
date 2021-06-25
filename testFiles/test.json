@@ -1,0 +1,26 @@
+[
+    {
+      "Version": 1,
+      "Date_measurement": "2020-03-30",
+      "RWZI_AWZI_code": 32002,
+      "RWZI_AWZI_name": "Tilburg",
+      "RNA_per_ml": 1837,
+      "RNA_flow_per_100000": null
+    },
+    {
+      "Version": 1,
+      "Date_measurement": "2020-03-31",
+      "RWZI_AWZI_code": 3010,
+      "RWZI_AWZI_name": "Assen",
+      "RNA_per_ml": 2254,
+      "RNA_flow_per_100000": null
+    },
+    {
+      "Version": 1,
+      "Date_measurement": "2020-03-31",
+      "RWZI_AWZI_code": 1033,
+      "RWZI_AWZI_name": "Garmerwolde",
+      "RNA_per_ml": 427,
+      "RNA_flow_per_100000": null
+    }
+]
